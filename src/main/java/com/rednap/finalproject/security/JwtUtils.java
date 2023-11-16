@@ -28,11 +28,12 @@ public class JwtUtils {
     }
 
     public String generate(final String login) {
-        return JWT.create()
+        final String token = JWT.create()
                 .withSubject(login)
                 .withIssuedAt(Instant.now())
                 .withExpiresAt(Instant.now().plusSeconds(expirationTime))
                 .sign(algorithm);
+        return String.format("Bearer %s", token);
     }
 
     public Optional<DecodedJWT> validateAndDecode(final String token) {

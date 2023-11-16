@@ -28,6 +28,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .formLogin(formLogin -> formLogin.disable())
                 .authorizeHttpRequests(registry -> registry
+                        .requestMatchers("/api/user/register", "/api/user/authenticate").anonymous()
                         .anyRequest().authenticated());
 
         return http.build();
