@@ -5,6 +5,7 @@ import com.rednap.finalproject.model.dto.JwtResponse;
 import com.rednap.finalproject.model.dto.UserInfo;
 import com.rednap.finalproject.model.dto.UserLoginRequest;
 import com.rednap.finalproject.model.dto.UserRegisterRequest;
+import com.rednap.finalproject.model.entity.OrderEntity;
 import com.rednap.finalproject.model.entity.UserEntity;
 import com.rednap.finalproject.repository.UserRepository;
 import com.rednap.finalproject.security.JwtUtils;
@@ -79,6 +80,24 @@ public class UserServiceImpl implements UserService {
 
         final String username = authentication.getName();
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public Optional<UserEntity> getById(final Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public void addOrder(final OrderEntity orderEntity) {
+        final Optional<UserEntity> optionalUserEntity = getCurrentUser();
+
+        if(optionalUserEntity.isEmpty()) {
+            return;
+        }
+
+        final UserEntity userEntity = optionalUserEntity.get();
+        userEntity.getOrders().add(orderEntity);
+        userRepository.save(userEntity);
     }
 
     private Optional<JwtResponse> generateToken(final String username) {

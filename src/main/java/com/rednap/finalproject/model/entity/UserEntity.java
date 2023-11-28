@@ -1,13 +1,13 @@
 package com.rednap.finalproject.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,6 +22,8 @@ public class UserEntity {
     private String email;
     private String passHash;
     private UserRole role;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<OrderEntity> orders = new ArrayList<>();
 
 
     public enum UserRole {
