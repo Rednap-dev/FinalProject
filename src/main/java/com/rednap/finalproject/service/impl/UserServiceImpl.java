@@ -65,6 +65,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserInfo> getUserInfo() {
+        final Optional<UserEntity> optionalUserEntity = getCurrentUser();
+        return optionalUserEntity.map(userMapper::toUserInfo);
+    }
+
+    @Override
+    public Optional<UserEntity> getCurrentUser() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(Objects.isNull(authentication)) {
@@ -72,8 +78,7 @@ public class UserServiceImpl implements UserService {
         }
 
         final String username = authentication.getName();
-        final Optional<UserEntity> optionalUserEntity = userRepository.findByUsername(username);
-        return optionalUserEntity.map(userMapper::toUserInfo);
+        return userRepository.findByUsername(username);
     }
 
     private Optional<JwtResponse> generateToken(final String username) {
