@@ -1,5 +1,8 @@
 package com.rednap.finalproject.service.impl;
 
+import com.rednap.finalproject.exception.ItemNameConflictException;
+import com.rednap.finalproject.mapper.ItemMapper;
+import com.rednap.finalproject.model.dto.ItemCreateRequest;
 import com.rednap.finalproject.model.entity.ItemEntity;
 import com.rednap.finalproject.repository.ItemRepository;
 import com.rednap.finalproject.service.ItemService;
@@ -14,6 +17,7 @@ import java.util.Optional;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
+    private final ItemMapper itemMapper;
 
     @Override
     public List<ItemEntity> getAllItems() {
@@ -28,5 +32,16 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Optional<ItemEntity> getById(final Long id) {
         return itemRepository.findById(id);
+    }
+
+    @Override
+    public ItemEntity addItem(final ItemCreateRequest itemCreateRequest) {
+        if(itemRepository.existsByName(itemCreateRequest.getName())) {
+            throw new ItemNameConflictException(itemCreateRequest.getName());
+        }
+
+        final ItemEntity itemEntity = itemMapper.toItemEntity(itemCreateRequest);
+        itemRepository.save(itemEntity);
+        return itemEntity;
     }
 }

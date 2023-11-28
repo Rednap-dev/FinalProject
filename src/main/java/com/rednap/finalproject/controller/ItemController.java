@@ -1,17 +1,18 @@
 package com.rednap.finalproject.controller;
 
+import com.rednap.finalproject.configuration.annotations.IfAdmin;
+import com.rednap.finalproject.model.dto.ItemCreateRequest;
 import com.rednap.finalproject.model.entity.ItemEntity;
 import com.rednap.finalproject.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET})
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 @RequiredArgsConstructor
 @RequestMapping("/api/item")
 public class ItemController {
@@ -30,7 +31,7 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity getAll(@RequestParam String searchString) {
+    public ResponseEntity search(@RequestParam String searchString) {
         final List<ItemEntity> items = itemService.searchByNameLike(searchString);
 
         if(items.isEmpty()) {
@@ -49,6 +50,12 @@ public class ItemController {
         }
 
         return ResponseEntity.ok(itemEntity.get());
+    }
+
+    @IfAdmin
+    @PostMapping("/add")
+    public ItemEntity add(@RequestBody ItemCreateRequest itemCreateRequest) {
+        return itemService.addItem(itemCreateRequest);
     }
 
 }

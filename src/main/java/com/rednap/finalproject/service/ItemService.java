@@ -1,5 +1,6 @@
 package com.rednap.finalproject.service;
 
+import com.rednap.finalproject.model.dto.ItemCreateRequest;
 import com.rednap.finalproject.model.entity.ItemEntity;
 import org.springframework.stereotype.Service;
 
@@ -11,4 +12,5 @@ public interface ItemService {
     List<ItemEntity> getAllItems();
     List<ItemEntity> searchByNameLike(final String searchQuery);
     Optional<ItemEntity> getById(final Long id);
+    ItemEntity addItem(final ItemCreateRequest itemCreateRequest);
 }
