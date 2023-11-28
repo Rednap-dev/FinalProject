@@ -100,6 +100,19 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userEntity);
     }
 
+    @Override
+    public void removeOrder(OrderEntity orderEntity) {
+        final Optional<UserEntity> optionalUserEntity = userRepository.findByOrderId(orderEntity.getId());
+
+        if(optionalUserEntity.isEmpty()) {
+            return;
+        }
+
+        final UserEntity userEntity = optionalUserEntity.get();
+        userEntity.getOrders().remove(orderEntity);
+        userRepository.save(userEntity);
+    }
+
     private Optional<JwtResponse> generateToken(final String username) {
         final String token = jwtUtils.generate(username);
         final JwtResponse jwtResponse = new JwtResponse(token);

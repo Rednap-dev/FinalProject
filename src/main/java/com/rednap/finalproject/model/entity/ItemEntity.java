@@ -15,4 +15,10 @@ public class ItemEntity {
     private String name;
     private double price;
     private String description;
+
+    @Override
+    public String toString() {
+        final String desc = description != null && description.trim().length() > 0 ? "(" + description + ")" : "";
+        return String.format("%s %s - %f$", name, desc, price);
+    }
 }

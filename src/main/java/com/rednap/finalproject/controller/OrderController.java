@@ -53,4 +53,14 @@ public class OrderController {
         return ResponseEntity.ok(orderDto.get());
     }
 
+    @GetMapping("/{id}/approve")
+    public void approve(@PathVariable Long id, @RequestParam String code) {
+        orderService.approveOrder(id, code);
+    }
+
+    @GetMapping("/{id}/decline")
+    public void decline(@PathVariable Long id, @RequestParam String code) {
+        orderService.declineOrder(id, code);
+    }
+
 }

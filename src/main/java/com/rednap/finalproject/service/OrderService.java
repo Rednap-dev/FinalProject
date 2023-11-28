@@ -13,6 +13,6 @@ public interface OrderService {
     Optional<OrderDto> createOrder(final OrderCreateRequest orderCreateRequest);
     List<OrderDto> getOrdersForCurrentUser();
     List<OrderDto> getOrdersForUser(final Long id);
-    boolean approveOrder(final Long orderId, final int code);
-    void declineOrder(final Long orderId);
+    void approveOrder(final Long orderId, final String code);
+    void declineOrder(final Long orderId, final String code);
 }

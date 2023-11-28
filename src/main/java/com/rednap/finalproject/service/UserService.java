@@ -18,4 +18,5 @@ public interface UserService {
     Optional<UserEntity> getCurrentUser();
     Optional<UserEntity> getById(final Long id);
     void addOrder(final OrderEntity orderEntity);
+    void removeOrder(final OrderEntity orderEntity);
 }

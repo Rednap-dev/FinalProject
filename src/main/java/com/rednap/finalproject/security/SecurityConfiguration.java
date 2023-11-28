@@ -32,6 +32,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers("/api/user/register", "/api/user/authenticate").anonymous()
                         .requestMatchers(HttpMethod.GET, "/api/item/**").permitAll()
+                        .requestMatchers("/api/order/{id}/decline", "/api/order/{id}/approve").permitAll()
                         .anyRequest().authenticated());
 
         return http.build();

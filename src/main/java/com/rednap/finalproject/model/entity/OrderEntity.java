@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -16,8 +17,9 @@ public class OrderEntity {
     private List<ItemStackEntity> items = new ArrayList<>();
     private OrderStatus orderStatus;
 
-    public void addItemStack(final ItemStackEntity itemStackEntity) {
-        items.add(itemStackEntity);
+    @Override
+    public String toString() {
+        return items.stream().map(ItemStackEntity::toString).collect(Collectors.joining("<br>"));
     }
 
     public enum OrderStatus {

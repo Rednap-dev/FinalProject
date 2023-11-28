@@ -15,7 +15,12 @@ public class ItemStackEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @ManyToOne
     private ItemEntity item;
     private int amount;
+
+    @Override
+    public String toString() {
+        return String.format("%s -> %d", item.toString(), amount);
+    }
 }

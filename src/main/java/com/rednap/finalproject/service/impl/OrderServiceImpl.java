@@ -1,14 +1,14 @@
 package com.rednap.finalproject.service.impl;
 
+import com.rednap.finalproject.generator.CodeGenerator;
 import com.rednap.finalproject.mapper.OrderMapper;
 import com.rednap.finalproject.model.dto.OrderCreateRequest;
 import com.rednap.finalproject.model.dto.OrderDto;
+import com.rednap.finalproject.model.entity.CodeEntity;
 import com.rednap.finalproject.model.entity.ItemStackEntity;
 import com.rednap.finalproject.model.entity.OrderEntity;
 import com.rednap.finalproject.repository.OrderRepository;
-import com.rednap.finalproject.service.ItemStackService;
-import com.rednap.finalproject.service.OrderService;
-import com.rednap.finalproject.service.UserService;
+import com.rednap.finalproject.service.*;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
@@ -25,6 +25,8 @@ public class OrderServiceImpl implements OrderService {
     private final UserService userService;
     private final OrderMapper orderMapper;
     private final ItemStackService itemStackService;
+    private final MailService mailService;
+    private final CodeService codeService;
 
     @Override
     public Optional<OrderDto> createOrder(final OrderCreateRequest orderCreateRequest) {
@@ -43,6 +45,11 @@ public class OrderServiceImpl implements OrderService {
         orderEntity.setItems(itemStackEntities);
         orderRepository.save(orderEntity);
         userService.addOrder(orderEntity);
+
+        final String code = codeService.generateCode(orderEntity);
+
+        mailService.sendOrderApprovalCode(code, orderEntity);
+
         return Optional.of(orderMapper.toDto(orderEntity));
     }
 
@@ -63,12 +70,28 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean approveOrder(Long orderId, int code) {
-        return false;
+    public void approveOrder(final Long orderId, final String code) {
+        if(checkCode(orderId, code)) {
+            final OrderEntity orderEntity = orderRepository.findById(orderId).get();
+            orderEntity.setOrderStatus(OrderEntity.OrderStatus.APPROVED);
+            orderRepository.save(orderEntity);
+        }
     }
 
     @Override
-    public void declineOrder(final Long orderId) {
+    public void declineOrder(final Long orderId, final String code) {
+        if(checkCode(orderId, code)) {
+            final OrderEntity orderEntity = orderRepository.findById(orderId).get();
+            userService.removeOrder(orderEntity);
+            orderRepository.delete(orderEntity);
+        }
+    }
 
+    private boolean checkCode(final Long orderId, final String code) {
+        if(!orderRepository.existsById(orderId)) {
+            return false;
+        }
+
+        return codeService.validate(code, orderId);
     }
 }

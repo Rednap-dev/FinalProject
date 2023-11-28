@@ -14,9 +14,9 @@ import java.util.Optional;
 
 @Component
 public class JwtUtils {
-    @Value("${sensors.jwt.secret}")
+    @Value("${netshop.jwt.secret}")
     private String secret;
-    @Value("${sensors.jwt.expiration-time}")
+    @Value("${netshop.jwt.expiration-time}")
     private int expirationTime;
     private Algorithm algorithm;
     private JWTVerifier verifier;
