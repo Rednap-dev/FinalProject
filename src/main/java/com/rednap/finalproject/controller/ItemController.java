@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+
 @RestController
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 @RequiredArgsConstructor
@@ -22,19 +23,16 @@ public class ItemController {
     @GetMapping("/all")
     public ResponseEntity getAll() {
         final List<ItemEntity> items = itemService.getAllItems();
-
-        if(items.isEmpty()) {
+        if (items.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-
         return ResponseEntity.ok(items);
     }
 
     @GetMapping("/search")
     public ResponseEntity search(@RequestParam String searchString) {
         final List<ItemEntity> items = itemService.searchByNameLike(searchString);
-
-        if(items.isEmpty()) {
+        if (items.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 
@@ -44,8 +42,7 @@ public class ItemController {
     @GetMapping("/{id}")
     public ResponseEntity getById(@PathVariable Long id) {
         final Optional<ItemEntity> itemEntity = itemService.getById(id);
-
-        if(itemEntity.isEmpty()) {
+        if (itemEntity.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 

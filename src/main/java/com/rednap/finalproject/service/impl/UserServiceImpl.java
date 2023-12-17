@@ -12,6 +12,8 @@ import com.rednap.finalproject.security.JwtUtils;
 import com.rednap.finalproject.service.UserService;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +24,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -67,6 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserInfo> getUserInfo() {
         final Optional<UserEntity> optionalUserEntity = getCurrentUser();
+        log.info("Method getUserInfo is working success!");
         return optionalUserEntity.map(userMapper::toUserInfo);
     }
 

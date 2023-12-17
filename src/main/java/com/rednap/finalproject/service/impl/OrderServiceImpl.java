@@ -10,6 +10,7 @@ import com.rednap.finalproject.model.entity.OrderEntity;
 import com.rednap.finalproject.repository.OrderRepository;
 import com.rednap.finalproject.service.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -37,6 +39,7 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
 
         if(itemStackEntities.isEmpty()) {
+            log.warn("ItemStack is empty");
             return Optional.empty();
         }
 

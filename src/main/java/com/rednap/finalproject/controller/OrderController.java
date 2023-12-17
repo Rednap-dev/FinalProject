@@ -5,6 +5,7 @@ import com.rednap.finalproject.model.dto.OrderCreateRequest;
 import com.rednap.finalproject.model.dto.OrderDto;
 import com.rednap.finalproject.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 @RequestMapping("/api/order")
 @CrossOrigin(origins = "*", methods = {RequestMethod.POST, RequestMethod.GET})
 @RequiredArgsConstructor
+@Slf4j
 public class OrderController {
 
     private final OrderService orderService;
@@ -22,11 +24,10 @@ public class OrderController {
     @GetMapping("/current")
     public ResponseEntity getOrdersForCurrentUser() {
         final List<OrderDto> orders = orderService.getOrdersForCurrentUser();
-
-        if(orders.isEmpty()) {
+        if (orders.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-
+        log.info("item method getOrdersForCurrentUser is working!");
         return ResponseEntity.ok(orders);
     }
 
@@ -35,7 +36,7 @@ public class OrderController {
     public ResponseEntity getOrdersForSpecificUser(@PathVariable Long id) {
         final List<OrderDto> orders = orderService.getOrdersForUser(id);
 
-        if(orders.isEmpty()) {
+        if (orders.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 
@@ -46,7 +47,7 @@ public class OrderController {
     public ResponseEntity createOrder(@RequestBody OrderCreateRequest orderCreateRequest) {
         final Optional<OrderDto> orderDto = orderService.createOrder(orderCreateRequest);
 
-        if(orderDto.isEmpty()) {
+        if (orderDto.isEmpty()) {
             return ResponseEntity.accepted().build();
         }
 

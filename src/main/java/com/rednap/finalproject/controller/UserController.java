@@ -6,6 +6,7 @@ import com.rednap.finalproject.model.dto.UserLoginRequest;
 import com.rednap.finalproject.model.dto.UserRegisterRequest;
 import com.rednap.finalproject.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 @RequestMapping("/api/user")
 @CrossOrigin(origins = "*", methods = {RequestMethod.POST, RequestMethod.GET})
 @AllArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -23,7 +25,7 @@ public class UserController {
     public ResponseEntity authenticate(@RequestBody UserLoginRequest userLoginRequest) {
         Optional<JwtResponse> jwtResponse = userService.authenticate(userLoginRequest);
 
-        if(jwtResponse.isPresent()) {
+        if (jwtResponse.isPresent()) {
             return ResponseEntity.ok(jwtResponse.get());
         }
 
@@ -34,7 +36,7 @@ public class UserController {
     public ResponseEntity register(@RequestBody UserRegisterRequest userRegisterRequest) {
         Optional<JwtResponse> jwtResponse = userService.register(userRegisterRequest);
 
-        if(jwtResponse.isPresent()) {
+        if (jwtResponse.isPresent()) {
             return ResponseEntity.ok(jwtResponse.get());
         }
 
@@ -45,10 +47,10 @@ public class UserController {
     public ResponseEntity getUserInfo() {
         final Optional<UserInfo> userInfoOptional = userService.getUserInfo();
 
-        if(userInfoOptional.isEmpty()) {
+        if (userInfoOptional.isEmpty()) {
             return ResponseEntity.status(403).build();
         }
-
+        log.info("item method getUserInfo is working!");
         return ResponseEntity.ok(userInfoOptional.get());
     }
 

@@ -1,4 +1,4 @@
-package com.rednap.finalproject.model;
+package com.rednap.finalproject.security;
 
 import com.rednap.finalproject.model.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;

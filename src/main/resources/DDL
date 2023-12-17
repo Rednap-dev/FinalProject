@@ -1,0 +1,74 @@
+create table if not exists item_entity
+(
+    id          bigint auto_increment
+        primary key,
+    description varchar(255) null,
+    name        varchar(255) null,
+    price       double       not null
+);
+
+create table if not exists item_stack_entity
+(
+    id      bigint auto_increment
+        primary key,
+    amount  int    not null,
+    item_id bigint null,
+    constraint FK3qg064nqre0fmu224if53cq7u
+        foreign key (item_id) references item_entity (id)
+);
+
+create table if not exists order_entity
+(
+    id           bigint auto_increment
+        primary key,
+    order_status tinyint null,
+    check (`order_status` between 0 and 1)
+);
+
+create table if not exists code_entity
+(
+    id              bigint auto_increment
+        primary key,
+    code            varchar(255) null,
+    order_entity_id bigint       null,
+    constraint UK_1ado6v3g4rki78d9lxgxytiq3
+        unique (order_entity_id),
+    constraint FK48goyi0ywdauhjdteo7952m3w
+        foreign key (order_entity_id) references order_entity (id)
+);
+
+create table if not exists order_entity_items
+(
+    order_entity_id bigint not null,
+    items_id        bigint not null,
+    constraint UK_mprp1x0w14f8vshugkdjorrg4
+        unique (items_id),
+    constraint FKmtufwelf3gde8ce4fg6p0vvlc
+        foreign key (items_id) references item_stack_entity (id),
+    constraint FKro5obuq05ifhq64qlcjs36kmb
+        foreign key (order_entity_id) references order_entity (id)
+);
+
+create table if not exists user_entity
+(
+    id        bigint auto_increment
+        primary key,
+    email     varchar(255) null,
+    pass_hash varchar(255) null,
+    role      tinyint      null,
+    username  varchar(255) null,
+    check (`role` between 0 and 1)
+);
+
+create table if not exists user_entity_orders
+(
+    user_entity_id bigint not null,
+    orders_id      bigint not null,
+    constraint UK_enkeibsmcd4blsut5v79brvpn
+        unique (orders_id),
+    constraint FK2y1aradm5tkihdptlss82ic6n
+        foreign key (orders_id) references order_entity (id),
+    constraint FKumym80r2mygxwdx2qsbausrf
+        foreign key (user_entity_id) references user_entity (id)
+);
+
